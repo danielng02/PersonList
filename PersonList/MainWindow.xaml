@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PersonList"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="0.5*"/>
@@ -22,12 +22,13 @@
 
 
         <ListView Name="Name" Grid.Column="0" Grid.RowSpan="5" ItemsSource="{Binding .}"
-                  SelectionChanged="Name_SelectionChanged">
+                  SelectionChanged="Name_SelectionChanged"
+                  MouseDoubleClick="Person_MouseDoubleClick">>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Value.Name}" FontWeight="DemiBold"/>
-                        <TextBlock Text="{Binding Value.Surname}" FontWeight="DemiBold"/>
+                        <TextBlock Text="{Binding Name}" FontWeight="DemiBold"/>
+                        <TextBlock Text="{Binding Surname}" FontWeight="DemiBold"/>
                         <TextBlock Text=", "/>
                     </StackPanel>
                 </DataTemplate>

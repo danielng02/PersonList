@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,12 +22,13 @@ namespace PersonList
         public MainWindow()
         {
             InitializeComponent();
-            Name.DataContext = Person.People;
+            Person k = new Person();
+            Name.DataContext = k;
             CreatePeople();
         }
         private void Name_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Person p = ((KeyValuePair<string, Person>)Name.SelectedItem).Value;
+            Person p = (Person)(sender as ListView).SelectedItem;
             DataContext = p;
         }
 
@@ -34,58 +36,65 @@ namespace PersonList
         {
             Name.SelectedIndex = 0;
         }
+       private void Person_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Person p = (Person)((sender as ListView).SelectedItem);
+            Edit pe = new Edit(p);
+            pe.ShowDialog();
+        }
         public static void CreatePeople()
         {
-                Person.People["Jan"] = new Person
-                {
-                    Name = "Jan",
-                    Surname = "Polívka",
-                    DateOfBirth = new DateTime(1998, 10, 28),
-                    IdentityNumber = "981028/5809"
-                };
+            Person.People.Add (new Person
+            {
+                Name = "Jan",
+                Surname = "Polívka",
+                DateOfBirth = new DateTime(1998, 10, 28),
+                IdentityNumber = "981028/5809"
+            });
 
-                Person.People["Petr"] = new Person
-                {
-                    Name = "Petr",
-                    Surname = "Proske",
-                    DateOfBirth = new DateTime(2002, 1, 17),
-                    IdentityNumber = "020117/1774"
-                };
+            Person.People.Add (new Person
+            {
+                Name = "Petr",
+                Surname = "Proske",
+                DateOfBirth = new DateTime(2002, 1, 17),
+                IdentityNumber = "020117/1774"
+            });
 
-                Person.People["Luboš"] = new Person
-                {
-                    Name = "Luboš",
-                    Surname = "Kajínek",
-                    DateOfBirth = new DateTime(1997, 3, 1),
-                    IdentityNumber = "970301/4712"
-                };
+            Person.People.Add (new Person
+            {
+                Name = "Luboš",
+                Surname = "Kajínek",
+                DateOfBirth = new DateTime(1997, 3, 1),
+                IdentityNumber = "970301/4712"
+            });
 
-                Person.People["Jakub"] = new Person
-                {
-                    Name = "Jakub",
-                    Surname = "Kron",
-                    DateOfBirth = new DateTime(2014, 9, 6),
-                    IdentityNumber = "170906/9845"
-                };
+            Person.People.Add (new Person
+            {
+                Name = "Jakub",
+                Surname = "Kron",
+                DateOfBirth = new DateTime(2014, 9, 6),
+                IdentityNumber = "170906/9845"
+            });
 
-                Person.People["Martin"] = new Person
-                {
-                    Name = "Martin",
-                    Surname = "Macek",
-                    DateOfBirth = new DateTime(2008, 12, 13),
-                    IdentityNumber = "081213/0045"
-                };
+            Person.People.Add (new Person
+            {
+                Name = "Martin",
+                Surname = "Macek",
+                DateOfBirth = new DateTime(2008, 12, 13),
+                IdentityNumber = "081213/0045"
+            });
 
 
         }
     }
-    class Person : INotifyPropertyChanged
+}
+    public class Person : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public static Dictionary<string, Person> People = new Dictionary<string, Person>();
+    public static ObservableCollection<Person> People { get; set; } = new ObservableCollection<Person>();
 
-        private string name;
+    private string name;
         public string Name
         {
             get => name;
@@ -113,4 +122,3 @@ namespace PersonList
             set { identityNumber = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("SuccessRate")); }
         }
     }
-}
